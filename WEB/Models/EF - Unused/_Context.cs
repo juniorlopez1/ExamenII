@@ -1,10 +1,11 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using WEB.Models;
 
 #nullable disable
 
-namespace WEB.Models
+namespace Negocios
 {
     public partial class _Context : DbContext
     {
