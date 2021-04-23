@@ -12,7 +12,7 @@ namespace API.Controllers
     [ApiController]
 
     /*Se especifica la ruta Prefix del controller*/
-    [Route("api/automovil")]
+    [Route("api/[controller]")]
     public class AutomovilController : ControllerBase
     {
         private readonly AutomovilService _service;

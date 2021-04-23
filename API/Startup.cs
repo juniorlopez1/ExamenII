@@ -9,7 +9,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Negocios;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +45,7 @@ namespace API
             });
 
 
+            /* SQL ----------------------------------------------------------------- */
             /* https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-5.0 */
             //Agrega Servicios de carpeta "Services", lambda Context
             services.AddScoped(p => new AutomovilService(p.GetService<Context>()));
@@ -50,6 +53,19 @@ namespace API
             //Agrega Servicio el Context de Entity Framework usando default connection del appsettings.json
             services.AddDbContext<Context>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            /* mongodb --------------------------------------------------------------- */
+
+            // requires using Microsoft.Extensions.Options
+            services.Configure<MongodbSettings>(
+                Configuration.GetSection(nameof(MongodbSettings)));
+
+            services.AddSingleton<IMongodbSettings>(sp =>
+                sp.GetRequiredService<IOptions<MongodbSettings>>().Value);
+
+            services.AddSingleton<BitacoraService>();
+            // requires using Microsoft.Extensions.Options
+
+            /* netcore -------------------------------------------------------------- */
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
