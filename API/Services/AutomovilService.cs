@@ -10,18 +10,20 @@ namespace API.Services
 {
     public interface IAutomovilService
     {
-
+        Task<Automovil> CreateAutomovilAsync(Automovil automovil);
+        Task<List<Automovil>> GetAutomovilAsync();
+        Task<Automovil> DetailsAutomovilAsync(string placa);
+        Task<Automovil> EditAutomovilAsync(string placa, Automovil automovil);
+        Task<Automovil> DeleteAutomvilAsync(string placa);
     }
 
-    public class AutomovilService
+    public class AutomovilService : IAutomovilService
     {
         private readonly Context _context;
-        //private readonly RegistroServicio _registroServicio;
 
         public AutomovilService(Context context)
         {
             _context = context;
-            //_registroServicio = registroServicio;
         }
 
         public async Task<Automovil> CreateAutomovilAsync(Automovil automovil)

@@ -1,7 +1,10 @@
+using API.Services;
+using Datos;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,6 +29,27 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            /*Para utilizar el API
+            CORS para que un dominio distinto se pueda accesar */
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "DefaultCorsPolicy", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
+            });
+
+
+            /* https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-5.0 */
+            //Agrega Servicios de carpeta "Services", lambda Context
+            services.AddScoped(p => new AutomovilService(p.GetService<Context>()));
+
+            //Agrega Servicio el Context de Entity Framework usando default connection del appsettings.json
+            services.AddDbContext<Context>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -45,11 +69,16 @@ namespace API
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             app.UseRouting();
 
+            /*CORS para que un dominio distinto se pueda accesar*/
+            app.UseCors("DefaultCorsPolicy");
+
             app.UseAuthorization();
 
+            /*Para usar el API*/
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
