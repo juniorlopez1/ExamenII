@@ -4,6 +4,7 @@ using System.Collections.Generic;
 #nullable disable
 
 namespace WEB.Models
+
 /* Se tomo del EF. Ahora es un ViewModel */
 {
     public partial class AutomovilViewModel

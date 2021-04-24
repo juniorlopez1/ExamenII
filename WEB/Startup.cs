@@ -10,7 +10,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Negocios;
+using WEB.Data;
+using Microsoft.Extensions.Options;
+using WEB.Services;
+
 
 namespace WEB
 {
@@ -27,7 +30,24 @@ namespace WEB
         public void ConfigureServices(IServiceCollection services)
         {
             var connection = @"Server=tcp:universidadamericana-sql.database.windows.net,1433;Initial Catalog=ExamenII;Persist Security Info=False;User ID=sa-universidadamericana-sql;Password=UAM2021.;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-            services.AddDbContext<_Context>(options => options.UseSqlServer(connection));
+            services.AddDbContext<Negocios._Context>(options => options.UseSqlServer(connection));
+
+            /* mongodb --------------------------------------------------------------- */
+
+            // requires using Microsoft.Extensions.Options
+            services.Configure<MongodbSettings>(
+                Configuration.GetSection(nameof(MongodbSettings)));
+
+            services.AddSingleton<IMongodbSettings>(sp =>
+                sp.GetRequiredService<IOptions<MongodbSettings>>().Value);
+
+            //requires
+            services.AddScoped<IBitacoraService, BitacoraService>();
+
+            //services.AddSingleton<BitacoraService>();
+            // requires using Microsoft.Extensions.Options
+
+            /* netcore -------------------------------------------------------------- */
 
             services.AddControllersWithViews();
         }
