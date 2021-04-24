@@ -16,10 +16,9 @@ namespace API.Controllers
     {
         #region Property - Constructors
 
-        private readonly BitacoraService _bitacoraService;
+        private readonly IBitacoraService _bitacoraService;
 
-        public BitacoraController(BitacoraService bitacoraService)
-
+        public BitacoraController(IBitacoraService bitacoraService)
         {
             _bitacoraService = bitacoraService;
         }
@@ -41,47 +40,49 @@ namespace API.Controllers
         #endregion
 
         #region CRUD Unused
-        //[HttpGet("{id:length(24)}", Name = "GetBook")]
-        //public ActionResult<Bitacora> Get(string id)
-        //{
-        //    var book = _bitacoraService.Get(id);
+        [HttpGet("{id:length(24)}", Name = "GetBook")]
+        public ActionResult<Bitacora> Get(string id)
+        {
+            var book = _bitacoraService.Get(id);
 
-        //    if (book == null)
-        //    {
-        //        return NotFound();
-        //    }
+            if (book == null)
+            {
+                return NotFound();
+            }
 
-        //    return book;
-        //}
-        //[HttpPut("{id:length(24)}")]
-        //public IActionResult Update(string id, Bitacora bookIn)
-        //{
-        //    var book = _bitacoraService.Get(id);
+            return book;
+        }
 
-        //    if (book == null)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpPut("{id:length(24)}")]
+        public IActionResult Update(string id, Bitacora bookIn)
+        {
+            var book = _bitacoraService.Get(id);
 
-        //    _bitacoraService.Update(id, bookIn);
+            if (book == null)
+            {
+                return NotFound();
+            }
 
-        //    return NoContent();
-        //}
+            _bitacoraService.Update(id, bookIn);
 
-        //[HttpDelete("{id:length(24)}")]
-        //public IActionResult Delete(string id)
-        //{
-        //    var book = _bitacoraService.Get(id);
+            return NoContent();
+        }
 
-        //    if (book == null)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpDelete("{id:length(24)}")]
+        public IActionResult Delete(string id)
+        {
+            var book = _bitacoraService.Get(id);
 
-        //    _bitacoraService.Remove(book.Id);
+            if (book == null)
+            {
+                return NotFound();
+            }
 
-        //    return NoContent();
-        //}
+            _bitacoraService.Remove(book.Id);
+
+            return NoContent();
+        }
+
         #endregion
     }
 }

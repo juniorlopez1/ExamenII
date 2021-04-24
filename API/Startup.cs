@@ -62,7 +62,10 @@ namespace API
             services.AddSingleton<IMongodbSettings>(sp =>
                 sp.GetRequiredService<IOptions<MongodbSettings>>().Value);
 
-            services.AddSingleton<BitacoraService>();
+            //requires
+            services.AddScoped<IBitacoraService, BitacoraService>();
+
+            //services.AddSingleton<BitacoraService>();
             // requires using Microsoft.Extensions.Options
 
             /* netcore -------------------------------------------------------------- */

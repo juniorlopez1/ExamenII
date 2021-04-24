@@ -9,7 +9,17 @@ using System.Threading.Tasks;
 
 namespace Negocios
 {
-    public class BitacoraService
+    public interface IBitacoraService
+    {
+        List<Bitacora> Get();
+        Bitacora Get(string Id);
+        Bitacora Create(Bitacora bitacora);
+        void Update(string Id, Bitacora bitacora);
+        void Remove(Bitacora bitacora);
+        void Remove(string Id);
+    }
+
+    public class BitacoraService : IBitacoraService
     {
         #region Property - Constructor
 
@@ -36,21 +46,22 @@ namespace Negocios
             return bitacora;
         }
 
+
         #endregion
 
         #region CRUD Unused
 
-        //public Bitacora Get(string id) =>
-        //    _bitacora.Find<Bitacora>(bitacora => bitacora.Id == id).FirstOrDefault();
+        public Bitacora Get(string id) =>
+            _bitacora.Find<Bitacora>(bitacora => bitacora.Id == id).FirstOrDefault();
 
-        //public void Update(string id, Bitacora bitacora) =>
-        //    _bitacora.ReplaceOne(bitacora => bitacora.Id == id, bitacora);
+        public void Update(string id, Bitacora bitacora) =>
+            _bitacora.ReplaceOne(bitacora => bitacora.Id == id, bitacora);
 
-        //public void Remove(Bitacora bitacora) =>
-        //    _bitacora.DeleteOne(bitacora => bitacora.Id == bitacora.Id);
+        public void Remove(Bitacora bitacora) =>
+            _bitacora.DeleteOne(bitacora => bitacora.Id == bitacora.Id);
 
-        //public void Remove(string id) =>
-        //    _bitacora.DeleteOne(bitacora => bitacora.Id == id);
+        public void Remove(string id) =>
+            _bitacora.DeleteOne(bitacora => bitacora.Id == id);
 
         #endregion
     }
