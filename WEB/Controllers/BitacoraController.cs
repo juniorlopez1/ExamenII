@@ -3,20 +3,27 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Web.Models;
-using WEB.Services;
+using Web.Services;
 
-namespace WEB.Controllers
+namespace Web.Controllers
 {
     public class BitacoraController : Controller
     {
-        private readonly IBitacoraService service;
+        private readonly IBitacoraWebService _service;
+
+        public BitacoraController(IBitacoraWebService service)
+        {
+            _service = service;
+        }
 
         public async Task<ActionResult> Index()
         {
-            var view = await service.Get();
+            var view = await _service.Get();
             return View(view);
         }
+
+
+        #region NotUse
 
         //public async Task<ActionResult> Details(string id)
         //{
@@ -102,6 +109,8 @@ namespace WEB.Controllers
         //protected override void Dispose(bool disposing)
         //{
         //    base.Dispose(disposing);
-        //}
+        //} 
+
+        #endregion
     }
 }

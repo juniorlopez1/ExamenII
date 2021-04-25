@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WEB.Models.AutomovilViewModel>
+﻿@model IEnumerable<Web.Models.AutomovilViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -7,7 +7,7 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-controller="Automovil" asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -17,7 +17,8 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Modelo)
-            </th>
+            </th>+
+
             <th>
                 @Html.DisplayNameFor(model => model.Marca)
             </th>

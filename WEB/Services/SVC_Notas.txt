@@ -1,9 +1,0 @@
-﻿Debido a que el entity framework crea todo el context en el background todo queda como async. Para bases de datos no relaciones es necesario hacer otro servicio e interfaz de tipo async.
-
-Pregunta: Se puede hacer el servicio e interfaz del API async para solo hacer referencia y no crear el servicio de nuevo en el proyecto WEB?
-
-Al servicio le llaman repositorio pero sigue siendo un servicio
-
-https://qappdesign.com/code/using-mongodb-with-net-core-webapi/
-
-Este link implementa async con mongodb

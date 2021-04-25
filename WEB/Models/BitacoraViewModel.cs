@@ -14,15 +14,16 @@ namespace Web.Models
 
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
+
+        /*Necesario para la entidad de mongo */
         public string Id { get; set; }
+        public string Placa { get; set; }
+        public string Marca { get; set; }
+        public int Capacidad { get; set; }
+        public string TipoMarcha { get; set; }
+        public string Detalle { get; set; }
+        public string Accion { get; set; }
 
-        [BsonElement("Name")]
-        public string BookName { get; set; }
 
-        public decimal Price { get; set; }
-
-        public string Category { get; set; }
-
-        public string Author { get; set; }
     }
 }

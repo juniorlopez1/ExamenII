@@ -5,20 +5,69 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Negocios;
-using WEB.Models;
+using ModelsNotUse;
+using Web.Models;
+using Web.Services;
 
-namespace WEB.Controllers
+namespace Web.Controllers
 {
     public class AutomovilController : Controller
     {
+        /* context de sql */
         private readonly _Context _context;
+        /* servicio de mongo */
+        private readonly IBitacoraWebService _service;
 
-        public AutomovilController(_Context context)
+        public AutomovilController(_Context context, IBitacoraWebService service)
         {
             _context = context;
+            _service = service;
         }
 
+        #region CRUD
+
+        /* ------------------------------------------------------- CREATE */
+        // GET: Automovils/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Automovils/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Placa,Modelo,Marca,Capacidad,TipoMarcha")] AutomovilViewModel automovil)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            _context.Add(automovil);
+            await _context.SaveChangesAsync();
+
+
+            /*  --------------------------- para mongodb registro bitacora */
+            var bitacora = new BitacoraViewModel()
+            {
+                Placa = automovil.Placa,
+                Marca = automovil.Marca,
+                Capacidad = automovil.Capacidad,
+                TipoMarcha = automovil.TipoMarcha,
+                /* sobreescribe el metodo ToString en el view model Entidad */
+                Detalle = automovil.ToString(),
+                Accion = "Create Automovil"
+
+            };
+            await _service.Create(bitacora);
+            /*  --------------------------- para mongodb registro bitacora */
+
+            return View(automovil);
+        }
+
+
+
+        /* ------------------------------------------------------- READ */
         // GET: Automovils
         public async Task<IActionResult> Index()
         {
@@ -43,28 +92,9 @@ namespace WEB.Controllers
             return View(automovil);
         }
 
-        // GET: Automovils/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
 
-        // POST: Automovils/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Placa,Modelo,Marca,Capacidad,TipoMarcha")] AutomovilViewModel automovil)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(automovil);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(automovil);
-        }
 
+        /* ------------------------------------------------------- UPDATE */
         // GET: Automovils/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
@@ -81,9 +111,7 @@ namespace WEB.Controllers
             return View(automovil);
         }
 
-        // POST: Automovils/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // PUT: Automovils/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("Placa,Modelo,Marca,Capacidad,TipoMarcha")] AutomovilViewModel automovil)
@@ -110,13 +138,30 @@ namespace WEB.Controllers
                     {
                         throw;
                     }
+
+                    /*  --------------------------- para mongodb registro bitacora */
+                    var bitacora = new BitacoraViewModel()
+                    {
+                        Placa = automovil.Placa,
+                        Marca = automovil.Marca,
+                        Capacidad = automovil.Capacidad,
+                        TipoMarcha = automovil.TipoMarcha,
+                        /* sobreescribe el metodo ToString en el view model Entidad */
+                        Detalle = automovil.ToString(),
+                        Accion = "Update Automovil"
+
+                    };
+                    await _service.Create(bitacora);
+                    /*  --------------------------- para mongodb registro bitacora */
                 }
                 return RedirectToAction(nameof(Index));
             }
             return View(automovil);
         }
 
-        // GET: Automovils/Delete/5
+
+        /* ------------------------------------------------------- DELETE */
+        // DELETE: Automovils/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -131,10 +176,25 @@ namespace WEB.Controllers
                 return NotFound();
             }
 
+            /*  --------------------------- para mongodb registro bitacora */
+            var bitacora = new BitacoraViewModel()
+            {
+                Placa = automovil.Placa,
+                Marca = automovil.Marca,
+                Capacidad = automovil.Capacidad,
+                TipoMarcha = automovil.TipoMarcha,
+                /* sobreescribe el metodo ToString en el view model Entidad */
+                Detalle = automovil.ToString(),
+                Accion = "Delete Automovil"
+
+            };
+            await _service.Create(bitacora);
+            /*  --------------------------- para mongodb registro bitacora */
+
             return View(automovil);
         }
 
-        // POST: Automovils/Delete/5
+        // DELETE: Automovils/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
@@ -144,6 +204,8 @@ namespace WEB.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        #endregion
 
         private bool AutomovilExists(string id)
         {

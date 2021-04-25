@@ -1,4 +1,4 @@
-using WEB.Models;
+using Web.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,12 +10,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WEB.Data;
+using Web.Data;
 using Microsoft.Extensions.Options;
-using WEB.Services;
+using Web.Services;
 
 
-namespace WEB
+namespace Web
 {
     public class Startup
     {
@@ -30,7 +30,7 @@ namespace WEB
         public void ConfigureServices(IServiceCollection services)
         {
             var connection = @"Server=tcp:universidadamericana-sql.database.windows.net,1433;Initial Catalog=ExamenII;Persist Security Info=False;User ID=sa-universidadamericana-sql;Password=UAM2021.;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-            services.AddDbContext<Negocios._Context>(options => options.UseSqlServer(connection));
+            services.AddDbContext<ModelsNotUse._Context>(options => options.UseSqlServer(connection));
 
             /* mongodb --------------------------------------------------------------- */
 
@@ -42,7 +42,7 @@ namespace WEB
                 sp.GetRequiredService<IOptions<MongodbSettings>>().Value);
 
             //requires
-            services.AddScoped<IBitacoraService, BitacoraService>();
+            services.AddScoped<IBitacoraWebService, BitacoraWebService>();
 
             //services.AddSingleton<BitacoraService>();
             // requires using Microsoft.Extensions.Options

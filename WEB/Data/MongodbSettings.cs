@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WEB.Data
+namespace Web.Data
 {
     /* Expone configuracion */
     public interface IMongodbSettings

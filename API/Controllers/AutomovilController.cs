@@ -47,7 +47,7 @@ namespace API.Controllers
 
 
         [HttpPost(Name = "CreateAutomovil")]
-        public async Task<IActionResult> Create(Automovil auto)
+        public async Task<IActionResult> CreateAutomovil(Automovil auto)
         {
             return Ok(await _service.CreateAutomovilAsync(auto));
         }
